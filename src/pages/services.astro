@@ -1,0 +1,147 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHeader from "../components/PageHeader.astro";
+import ClosingCta from "../components/ClosingCta.astro";
+import Icon from "../components/Icon.astro";
+import { services } from "../data/site";
+---
+
+<Base
+  title="Services"
+  description="Development, investment advisory, sales and leasing, asset management, facility management and project consultancy across the UAE."
+>
+  <PageHeader
+    crumb="Services"
+    eyebrow="What We Do"
+    title="Six disciplines, one accountable team."
+    lede="We take assets from feasibility through to long-term operation without handing responsibility to a chain of third parties."
+    image="https://images.unsplash.com/photo-1531973576160-7125cd663d86?auto=format&fit=crop&w=2000&q=80"
+  />
+
+  {/* Index rail */}
+  <section class="border-b border-white/10 bg-ink-950 py-8">
+    <div class="shell">
+      <div class="flex flex-wrap gap-x-8 gap-y-3">
+        {
+          services.map((service, i) => (
+            <a
+              href={`#${service.id}`}
+              class="group flex items-baseline gap-2.5 font-display text-[0.6875rem] font-semibold tracking-[0.16em] text-mute-300 uppercase transition-colors hover:text-bone-50"
+            >
+              <span class="text-brand-500 tnum">{String(i + 1).padStart(2, "0")}</span>
+              {service.title}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* Alternating detail blocks */}
+  {
+    services.map((service, i) => {
+      const flip = i % 2 === 1;
+      const onBone = i % 2 === 1;
+      return (
+        <section
+          id={service.id}
+          class:list={[
+            "scroll-mt-28 py-20 md:py-28",
+            onBone ? "bg-bone-100 text-ink-900" : "bg-ink-900",
+          ]}
+        >
+          <div class="shell">
+            <div class="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+              <div class:list={["lg:col-span-6", flip && "lg:order-2"]}>
+                <div class="frame aspect-4/3 w-full" data-reveal="mask">
+                  <img src={service.image} alt={service.title} loading="lazy" decoding="async" />
+                  <span
+                    aria-hidden="true"
+                    class="absolute bottom-0 left-0 flex h-16 w-16 items-center justify-center bg-brand-600 font-display text-lg font-bold text-white tnum"
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                </div>
+              </div>
+
+              <div class:list={["lg:col-span-6", flip && "lg:order-1"]}>
+                <span
+                  class:list={["eyebrow", onBone && "eyebrow--dark"]}
+                  data-reveal
+                >
+                  Service {String(i + 1).padStart(2, "0")}
+                </span>
+
+                <h2
+                  class:list={["display-md mt-6", onBone ? "text-ink-900" : "text-bone-50"]}
+                  data-reveal
+                  style="--reveal-delay:80ms"
+                >
+                  {service.title}
+                </h2>
+
+                <p
+                  class:list={["lede mt-6", onBone && "lede--dark"]}
+                  data-reveal={flip ? "right" : "left"}
+                  style="--reveal-delay:140ms"
+                >
+                  {service.summary}
+                </p>
+
+                <p
+                  class:list={[
+                    "mt-5 text-[0.9375rem] leading-relaxed",
+                    onBone ? "text-mute-500" : "text-mute-300",
+                  ]}
+                  data-reveal
+                  style="--reveal-delay:200ms"
+                >
+                  {service.detail}
+                </p>
+
+                <ul
+                  class:list={[
+                    "mt-9 space-y-3.5 border-t pt-8",
+                    onBone ? "border-ink-900/10" : "border-white/10",
+                  ]}
+                >
+                  {service.points.map((point, p) => (
+                    <li
+                      class="flex items-start gap-3.5"
+                      data-reveal
+                      style={`--reveal-delay:${240 + p * 80}ms`}
+                    >
+                      <span class="mt-0.5 flex h-5 w-5 flex-none items-center justify-center bg-brand-600 text-white">
+                        <Icon name="check" class="h-3 w-3" />
+                      </span>
+                      <span
+                        class:list={[
+                          "font-display text-[0.9375rem] font-medium",
+                          onBone ? "text-ink-800" : "text-bone-100",
+                        ]}
+                      >
+                        {point}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div class="mt-10" data-reveal style="--reveal-delay:460ms">
+                  <a
+                    href="/contact"
+                    class:list={["btn", onBone ? "btn-dark" : "btn-ghost"]}
+                  >
+                    Enquire About This Service
+                    <Icon name="arrow-right" class="h-4 w-4" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      );
+    })
+  }
+
+  <ClosingCta />
+</Base>

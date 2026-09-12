@@ -1,0 +1,130 @@
+---
+import "../styles/global.css";
+import { ClientRouter } from "astro:transitions";
+import { company } from "../data/site";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Home page runs a transparent header over the dark hero */
+  overHero?: boolean;
+}
+
+const {
+  title,
+  description = company.seoDescription,
+  overHero = false,
+} = Astro.props;
+
+const pageTitle = title ? `${title} — ${company.shortName}` : company.seoTitle;
+const canonical = new URL(Astro.url.pathname, company.siteUrl).href;
+---
+
+<!doctype html>
+<html lang="en" class="scroll-pt-28">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#0a0a0c" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={company.legalName} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <ClientRouter />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <noscript>
+      <style>
+        /* Reveals are progressive enhancement — without JS nothing may stay hidden */
+        [data-reveal],
+        [data-reveal-line] {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      </style>
+    </noscript>
+
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "RealEstateAgent",
+        name: company.legalName,
+        description: company.seoDescription,
+        url: company.siteUrl,
+      })}
+    />
+  </head>
+
+  <body>
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-brand-600 focus:px-5 focus:py-3 focus:font-display focus:text-xs focus:tracking-widest focus:text-white focus:uppercase"
+    >
+      Skip to content
+    </a>
+
+    <div id="nav-progress" aria-hidden="true"></div>
+
+    <Header overHero={overHero} />
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <Footer />
+
+    <script>
+      import { initMotion, destroyMotion } from "../scripts/motion";
+
+      const progress = () => document.getElementById("nav-progress");
+
+      /* astro:page-load fires on the first load and after every client-side
+         navigation, so this covers both without a separate bootstrap. */
+      document.addEventListener("astro:page-load", () => {
+        initMotion();
+
+        const bar = progress();
+        if (bar && bar.classList.contains("is-loading")) {
+          bar.classList.remove("is-loading");
+          bar.classList.add("is-done");
+          window.setTimeout(() => bar.classList.remove("is-done"), 700);
+        }
+      });
+
+      /* Tear observers and scroll listeners down before the DOM is swapped,
+         otherwise each navigation leaves another set running on dead nodes. */
+      document.addEventListener("astro:before-swap", destroyMotion);
+
+      document.addEventListener("astro:before-preparation", () => {
+        const bar = progress();
+        if (!bar) return;
+        bar.classList.remove("is-done");
+        /* Restart the grow animation from zero */
+        bar.style.transition = "none";
+        bar.style.transform = "scaleX(0)";
+        void bar.offsetWidth;
+        bar.style.transition = "";
+        bar.style.transform = "";
+        bar.classList.add("is-loading");
+      });
+    </script>
+  </body>
+</html>

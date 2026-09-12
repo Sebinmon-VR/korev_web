@@ -1,0 +1,87 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHeader from "../components/PageHeader.astro";
+import Projects from "../components/Projects.astro";
+import ClosingCta from "../components/ClosingCta.astro";
+import Icon from "../components/Icon.astro";
+import { projects } from "../data/site";
+
+const counts = {
+  total: projects.length,
+  completed: projects.filter((p) => p.status === "Completed").length,
+  active: projects.filter((p) => p.status === "Under Construction").length,
+  upcoming: projects.filter((p) => p.status === "Upcoming").length,
+};
+---
+
+<Base
+  title="Projects"
+  description="Residential, commercial and mixed-use developments delivered and under construction across Dubai, Abu Dhabi and Sharjah."
+>
+  <PageHeader
+    crumb="Projects"
+    eyebrow="Our Portfolio"
+    title="Every project, from handed over to breaking ground."
+    lede="Filter the portfolio by asset class. Each development is delivered, leased and managed by the same internal team."
+    image="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=2000&q=80"
+  />
+
+  {/* Status summary */}
+  <section class="border-b border-white/10 bg-ink-900">
+    <div class="shell">
+      <dl class="grid grid-cols-2 lg:grid-cols-4">
+        {
+          [
+            { label: "Total Projects", value: counts.total },
+            { label: "Completed", value: counts.completed },
+            { label: "Under Construction", value: counts.active },
+            { label: "Upcoming", value: counts.upcoming },
+          ].map((item, i) => (
+            <div
+              class:list={[
+                "py-8 pr-6 lg:py-10",
+                i > 0 && "lg:border-l lg:border-white/10 lg:pl-10",
+                i % 2 === 1 && "border-l border-white/10 pl-6 lg:pl-10",
+                i > 1 && "border-t border-white/10 lg:border-t-0",
+              ]}
+              data-reveal
+              style={`--reveal-delay:${i * 80}ms`}
+            >
+              <dd class="font-display text-3xl font-semibold tracking-tight text-bone-50 tnum lg:text-4xl">
+                <span data-count={String(item.value)}>{item.value}</span>
+              </dd>
+              <dt class="mt-2 font-display text-[0.6875rem] font-medium tracking-[0.18em] text-mute-300 uppercase">
+                {item.label}
+              </dt>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <Projects />
+
+  {/* Development enquiry strip */}
+  <section class="border-t border-white/10 bg-ink-950 py-16">
+    <div class="shell">
+      <div class="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
+        <div data-reveal>
+          <h2 class="font-display text-2xl font-semibold tracking-tight text-bone-50">
+            Looking for something not listed here?
+          </h2>
+          <p class="mt-2 max-w-xl text-[0.9375rem] text-mute-300">
+            We hold off-market stock and take on development mandates. Tell us the brief and we
+            will come back with what is available.
+          </p>
+        </div>
+        <a href="/contact" class="btn btn-primary flex-none" data-reveal style="--reveal-delay:100ms">
+          Register Your Requirement
+          <Icon name="arrow-right" class="h-4 w-4" />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <ClosingCta />
+</Base>

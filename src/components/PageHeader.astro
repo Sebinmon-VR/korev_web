@@ -1,0 +1,61 @@
+---
+import Icon from "./Icon.astro";
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  lede?: string;
+  image?: string;
+  crumb: string;
+}
+
+const { eyebrow, title, lede, image, crumb } = Astro.props;
+---
+
+<section class="relative overflow-hidden bg-ink-950 pt-40 pb-20 md:pt-48 md:pb-24 grain">
+  {
+    image && (
+      <div class="absolute inset-0 overflow-hidden">
+        <div class="frame absolute -top-[12%] left-0 h-[124%] w-full" data-parallax="90">
+          <img src={image} alt="" loading="eager" decoding="async" class="opacity-40" />
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-r from-ink-950 via-ink-950/85 to-ink-950/45" />
+        <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ink-950 to-transparent" />
+      </div>
+    )
+  }
+
+  <div class="shell relative">
+    {/* Breadcrumb */}
+    <nav aria-label="Breadcrumb" class="mb-8" data-reveal>
+      <ol
+        class="flex items-center gap-2.5 font-display text-[0.625rem] tracking-[0.18em] text-mute-400 uppercase"
+      >
+        <li><a href="/" class="transition-colors hover:text-bone-100">Home</a></li>
+        <li aria-hidden="true"><Icon name="arrow-right" class="h-3 w-3" /></li>
+        <li class="text-brand-500">{crumb}</li>
+      </ol>
+    </nav>
+
+    <span class="eyebrow" data-reveal style="--reveal-delay:60ms">{eyebrow}</span>
+
+    <h1 class="display-lg mt-6 max-w-4xl text-bone-50" data-split data-split-delay={140}>
+      {title}
+    </h1>
+
+    {
+      lede && (
+        <p class="lede mt-7 max-w-2xl" data-reveal style="--reveal-delay:200ms">
+          {lede}
+        </p>
+      )
+    }
+
+    <div
+      class="mt-10 h-[2px] w-24 origin-left bg-brand-600"
+      data-reveal-line
+      style="--reveal-delay:280ms"
+    >
+    </div>
+  </div>
+</section>

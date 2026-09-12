@@ -1,0 +1,146 @@
+---
+import { hero, heroStats } from "../data/site";
+import Icon from "./Icon.astro";
+---
+
+<section class="relative flex min-h-[100svh] flex-col overflow-hidden bg-ink-950 grain">
+  {/* Backdrop — oversized so the parallax drift never exposes an edge */}
+  <div class="absolute inset-0 overflow-hidden">
+    <div class="frame absolute -top-[14%] left-0 h-[128%] w-full" data-parallax="120">
+      <img
+        src={hero.image}
+        alt={hero.imageAlt}
+        fetchpriority="high"
+        decoding="async"
+        class="h-full w-full object-cover opacity-55"
+      />
+    </div>
+    {/* Legibility scrims: dark from the left, dark from the bottom */}
+    <div
+      class="absolute inset-0 bg-gradient-to-r from-ink-950 via-ink-950/85 to-ink-950/35"
+    >
+    </div>
+    <div
+      class="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-ink-950 via-ink-950/60 to-transparent"
+    >
+    </div>
+  </div>
+
+  {/* Vertical rule grid — the line motif as architecture */}
+  <div aria-hidden="true" class="pointer-events-none absolute inset-0 hidden lg:block">
+    <div class="shell relative h-full">
+      <div class="grid h-full grid-cols-4">
+        {[0, 1, 2, 3].map(() => <div class="border-l border-white/[0.06]" />)}
+      </div>
+    </div>
+  </div>
+
+  {/* Content — top padding clears the fixed header, then it centres in
+      whatever height is left so the stat rail stays on the fold */}
+  <div
+    class="shell relative flex flex-1 items-center pt-32 pb-12 md:pt-36 lg:pt-36 lg:pb-14"
+    data-hero-fade
+  >
+    <div class="w-full max-w-4xl">
+      <span class="eyebrow" data-reveal>{hero.eyebrow}</span>
+
+      <h1 class="display-xl mt-7 text-bone-50">
+        {
+          hero.headlineLines.map((line, i) => (
+            <span class="block" data-split data-split-delay={120 + i * 150}>
+              {line}
+            </span>
+          ))
+        }
+        <span
+          class="mt-1 block text-brand-500"
+          data-split
+          data-split-delay={120 + hero.headlineLines.length * 150}
+        >
+          {hero.headlineAccent}
+        </span>
+      </h1>
+
+      {/* The red line, drawn */}
+      <div
+        class="mt-8 h-[2px] w-28 origin-left bg-brand-600"
+        data-reveal-line
+        style="--reveal-delay:480ms"
+      >
+      </div>
+
+      <p class="lede mt-8 max-w-2xl" data-reveal style="--reveal-delay:540ms">
+        {hero.lede}
+      </p>
+
+      <div class="mt-9 flex flex-wrap gap-4" data-reveal style="--reveal-delay:640ms">
+        <a href={hero.primaryCta.href} class="btn btn-primary">
+          {hero.primaryCta.label}
+          <Icon name="arrow-right" class="h-4 w-4" />
+        </a>
+        <a href={hero.secondaryCta.href} class="btn btn-ghost">
+          {hero.secondaryCta.label}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  {/* Stat rail pinned to the base of the hero */}
+  <div class="relative border-t border-white/10 bg-ink-950/60 backdrop-blur-md">
+    <div class="shell">
+      <dl class="grid grid-cols-2 lg:grid-cols-4">
+        {
+          heroStats.map((stat, i) => (
+            <div
+              class:list={[
+                "flex flex-col gap-1.5 py-6 pr-6 lg:py-8",
+                i > 0 && "lg:border-l lg:border-white/10 lg:pl-10",
+                i % 2 === 1 && "border-l border-white/10 pl-6 lg:pl-10",
+                i > 1 && "border-t border-white/10 lg:border-t-0",
+              ]}
+              data-reveal
+              style={`--reveal-delay:${i * 90}ms`}
+            >
+              <dt class="order-2 font-display text-[0.6875rem] font-medium tracking-[0.18em] text-mute-300 uppercase">
+                {stat.label}
+              </dt>
+              <dd class="order-1 font-display text-4xl font-semibold tracking-tight text-bone-50 tnum lg:text-5xl">
+                <span data-count={stat.value}>{stat.value}</span>
+                <span class="text-brand-500">{stat.suffix}</span>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+
+  {/* Scroll cue — the wrapper is positioned unrotated so the label
+      cannot overflow the right edge once it is turned */}
+  <div class="absolute top-1/2 right-9 hidden -translate-y-1/2 xl:block">
+    <a
+      href="#about"
+      aria-label="Scroll to content"
+      class="flex rotate-90 items-center gap-3 whitespace-nowrap font-display text-[0.625rem] tracking-[0.24em] text-mute-300 uppercase transition-colors hover:text-bone-50"
+    >
+      Scroll
+      <span class="relative block h-px w-12 overflow-hidden bg-white/20">
+        <span class="scroll-dash absolute inset-y-0 left-0 w-1/2 bg-brand-500"></span>
+      </span>
+    </a>
+  </div>
+</section>
+
+<style>
+  @keyframes dash {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(200%);
+    }
+  }
+  .scroll-dash {
+    animation: dash 2.2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  }
+</style>

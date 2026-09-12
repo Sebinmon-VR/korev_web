@@ -1,0 +1,83 @@
+---
+import { about } from "../data/site";
+import Icon from "./Icon.astro";
+---
+
+<section id="about" class="relative bg-bone-100 py-24 text-ink-900 md:py-32">
+  <div class="shell">
+    <div class="grid items-center gap-14 lg:grid-cols-12 lg:gap-20">
+      {/* Image composition */}
+      <div class="relative lg:col-span-5">
+        <div class="frame aspect-4/5 w-full" data-reveal="mask">
+          <img src={about.image} alt={about.imageAlt} loading="lazy" decoding="async" />
+        </div>
+
+        {/* Overlapping secondary image */}
+        <div
+          class="frame absolute -right-4 -bottom-10 hidden aspect-square w-44 border-8 border-bone-100 md:block lg:-right-12 lg:w-56"
+          data-reveal="mask"
+          data-parallax="-38"
+          style="--reveal-delay:220ms"
+        >
+          <img
+            src={about.imageSecondary}
+            alt={about.imageSecondaryAlt}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+
+        {/* Established badge */}
+        <div
+          class="absolute -top-6 -left-4 flex flex-col items-center justify-center bg-brand-600 px-7 py-5 text-white lg:-left-10"
+          data-reveal
+          style="--reveal-delay:140ms"
+        >
+          <span class="font-display text-3xl font-bold tracking-tight tnum">
+            {about.badge.value}
+          </span>
+          <span class="mt-1 font-display text-[0.5625rem] tracking-[0.22em] uppercase opacity-85">
+            {about.badge.label}
+          </span>
+        </div>
+      </div>
+
+      {/* Copy */}
+      <div class="lg:col-span-7">
+        <span class="eyebrow eyebrow--dark" data-reveal>{about.eyebrow}</span>
+
+        <h2 class="display-md mt-6 text-ink-900" data-reveal style="--reveal-delay:80ms">
+          {about.title}
+        </h2>
+
+        <div class="mt-8 space-y-5" data-reveal="right" style="--reveal-delay:160ms">
+          {about.body.map((p) => <p class="lede lede--dark">{p}</p>)}
+        </div>
+
+        <ul class="mt-10 space-y-4 border-t border-ink-900/10 pt-9">
+          {
+            about.points.map((point, i) => (
+              <li
+                class="flex items-start gap-4"
+                data-reveal
+                style={`--reveal-delay:${220 + i * 90}ms`}
+              >
+                <span class="mt-0.5 flex h-6 w-6 flex-none items-center justify-center bg-brand-600 text-white">
+                  <Icon name="check" class="h-3.5 w-3.5" />
+                </span>
+                <span class="font-display text-[0.9375rem] font-medium text-ink-800">{point}</span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="mt-11" data-reveal style="--reveal-delay:520ms">
+          <a href={about.cta.href} class="btn btn-dark">
+            {about.cta.label}
+            <Icon name="arrow-right" class="h-4 w-4" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

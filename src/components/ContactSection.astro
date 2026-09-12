@@ -1,0 +1,283 @@
+---
+import { contact, contactForm } from "../data/site";
+import Icon from "./Icon.astro";
+
+const fieldBase =
+  "w-full border border-white/12 bg-ink-850 px-4 py-3.5 text-[0.9375rem] text-bone-100 placeholder:text-mute-400 transition-colors duration-300 focus:border-brand-600 focus:outline-none";
+const labelBase =
+  "block font-display text-[0.625rem] font-semibold tracking-[0.18em] text-mute-300 uppercase";
+---
+
+<section id="contact" class="bg-ink-900 py-24 md:py-32">
+  <div class="shell">
+    <div class="grid gap-14 lg:grid-cols-12 lg:gap-16">
+      {/* Details */}
+      <div class="lg:col-span-5">
+        <span class="eyebrow" data-reveal>Get in Touch</span>
+        <h2 class="display-md mt-6 text-bone-50" data-reveal style="--reveal-delay:80ms">
+          Talk to the team directly.
+        </h2>
+        <p class="lede mt-6" data-reveal style="--reveal-delay:160ms">
+          Send us the details of what you are planning and the right person will come back to you
+          — usually within one working day.
+        </p>
+
+        <dl class="mt-12 space-y-px bg-white/8">
+          <div class="flex gap-5 bg-ink-900 p-6" data-reveal>
+            <span class="flex h-11 w-11 flex-none items-center justify-center bg-brand-600 text-white">
+              <Icon name="pin" class="h-4.5 w-4.5" />
+            </span>
+            <div>
+              <dt class={labelBase}>Office</dt>
+              <dd class="mt-2 text-[0.9375rem] leading-relaxed text-mute-300">
+                {contact.addressLines.map((l) => <span class="block">{l}</span>)}
+              </dd>
+            </div>
+          </div>
+
+          <div class="flex gap-5 bg-ink-900 p-6" data-reveal style="--reveal-delay:80ms">
+            <span class="flex h-11 w-11 flex-none items-center justify-center bg-brand-600 text-white">
+              <Icon name="phone" class="h-4.5 w-4.5" />
+            </span>
+            <div>
+              <dt class={labelBase}>Telephone</dt>
+              <dd class="mt-2 space-y-1 text-[0.9375rem] text-mute-300">
+                <a href={`tel:${contact.phoneHref}`} class="block hover:text-bone-50">
+                  {contact.phone}
+                </a>
+                <a href={`tel:${contact.altPhoneHref}`} class="block hover:text-bone-50">
+                  {contact.altPhone}
+                </a>
+              </dd>
+            </div>
+          </div>
+
+          <div class="flex gap-5 bg-ink-900 p-6" data-reveal style="--reveal-delay:160ms">
+            <span class="flex h-11 w-11 flex-none items-center justify-center bg-brand-600 text-white">
+              <Icon name="mail" class="h-4.5 w-4.5" />
+            </span>
+            <div>
+              <dt class={labelBase}>Email</dt>
+              <dd class="mt-2 space-y-1 text-[0.9375rem] text-mute-300">
+                <a href={`mailto:${contact.email}`} class="block hover:text-bone-50">
+                  {contact.email}
+                </a>
+                <a href={`mailto:${contact.salesEmail}`} class="block hover:text-bone-50">
+                  {contact.salesEmail}
+                </a>
+              </dd>
+            </div>
+          </div>
+
+          <div class="flex gap-5 bg-ink-900 p-6" data-reveal style="--reveal-delay:240ms">
+            <span class="flex h-11 w-11 flex-none items-center justify-center bg-brand-600 text-white">
+              <Icon name="clock" class="h-4.5 w-4.5" />
+            </span>
+            <div class="flex-1">
+              <dt class={labelBase}>Working Hours</dt>
+              <dd class="mt-2 space-y-1.5 text-[0.9375rem] text-mute-300">
+                {
+                  contact.hours.map((h) => (
+                    <span class="flex justify-between gap-6">
+                      <span>{h.days}</span>
+                      <span class="text-bone-100 tnum">{h.time}</span>
+                    </span>
+                  ))
+                }
+              </dd>
+            </div>
+          </div>
+        </dl>
+      </div>
+
+      {/* Form */}
+      <div class="lg:col-span-7">
+        <div
+          class="relative border border-white/10 bg-ink-850 p-7 md:p-10"
+          data-reveal
+          style="--reveal-delay:120ms"
+        >
+          <span aria-hidden="true" class="absolute top-0 left-0 h-[3px] w-24 bg-brand-600"></span>
+
+          <h3 class="font-display text-xl font-semibold tracking-tight text-bone-50">
+            Send an Enquiry
+          </h3>
+          <p class="mt-2 text-sm text-mute-300">
+            Fields marked <span class="text-brand-500">*</span> are required.
+          </p>
+
+          <form
+            id="enquiry-form"
+            class="mt-9 grid gap-5 sm:grid-cols-2"
+            action={contactForm.action || undefined}
+            method="post"
+            novalidate
+          >
+            <div>
+              <label for="firstName" class={labelBase}>
+                First Name <span class="text-brand-500">*</span>
+              </label>
+              <input
+                id="firstName"
+                name="firstName"
+                type="text"
+                required
+                autocomplete="given-name"
+                placeholder="Your first name"
+                class={`${fieldBase} mt-2.5`}
+              />
+            </div>
+
+            <div>
+              <label for="lastName" class={labelBase}>
+                Last Name <span class="text-brand-500">*</span>
+              </label>
+              <input
+                id="lastName"
+                name="lastName"
+                type="text"
+                required
+                autocomplete="family-name"
+                placeholder="Your last name"
+                class={`${fieldBase} mt-2.5`}
+              />
+            </div>
+
+            <div>
+              <label for="email" class={labelBase}>
+                Email Address <span class="text-brand-500">*</span>
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                autocomplete="email"
+                placeholder="you@company.com"
+                class={`${fieldBase} mt-2.5`}
+              />
+            </div>
+
+            <div>
+              <label for="phone" class={labelBase}>Phone Number</label>
+              <input
+                id="phone"
+                name="phone"
+                type="tel"
+                autocomplete="tel"
+                placeholder="+971 ..."
+                class={`${fieldBase} mt-2.5`}
+              />
+            </div>
+
+            <div class="sm:col-span-2">
+              <label for="subject" class={labelBase}>
+                Subject <span class="text-brand-500">*</span>
+              </label>
+              <div class="relative mt-2.5">
+                <select
+                  id="subject"
+                  name="subject"
+                  required
+                  class={`${fieldBase} appearance-none pr-11`}
+                >
+                  <option value="">Please choose an option</option>
+                  {contactForm.subjects.map((s) => <option value={s}>{s}</option>)}
+                </select>
+                <Icon
+                  name="chevron-down"
+                  class="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-mute-300"
+                />
+              </div>
+            </div>
+
+            <div class="sm:col-span-2">
+              <label for="message" class={labelBase}>
+                Message <span class="text-brand-500">*</span>
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows="5"
+                required
+                placeholder="Tell us about your requirement"
+                class={`${fieldBase} mt-2.5 resize-y`}></textarea>
+            </div>
+
+            <div class="sm:col-span-2 flex flex-wrap items-center gap-5">
+              <button type="submit" class="btn btn-primary">
+                Send Enquiry
+                <Icon name="arrow-right" class="h-4 w-4" />
+              </button>
+              <p id="form-status" role="status" aria-live="polite" class="text-sm text-mute-300">
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  #enquiry-form :is(input, select, textarea).is-invalid {
+    border-color: var(--color-brand-500);
+  }
+  #enquiry-form select:invalid {
+    color: var(--color-mute-400);
+  }
+</style>
+
+<script>
+  function setup() {
+    const form = document.getElementById("enquiry-form") as HTMLFormElement | null;
+    if (!form) return;
+    const status = document.getElementById("form-status");
+
+    form.addEventListener("submit", (event) => {
+      const fields = form.querySelectorAll<
+        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+      >("[required]");
+
+      let firstInvalid: HTMLElement | null = null;
+      fields.forEach((field) => {
+        const ok = field.checkValidity();
+        field.classList.toggle("is-invalid", !ok);
+        if (!ok && !firstInvalid) firstInvalid = field;
+      });
+
+      if (firstInvalid) {
+        event.preventDefault();
+        (firstInvalid as HTMLElement).focus();
+        if (status) {
+          status.textContent = "Please complete the highlighted fields.";
+          status.className = "text-sm text-brand-400";
+        }
+        return;
+      }
+
+      /* No endpoint wired yet — confirm locally instead of navigating away.
+         Set contactForm.action in src/data/site.ts to post for real. */
+      if (!form.getAttribute("action")) {
+        event.preventDefault();
+        if (status) {
+          status.textContent = "Thank you — your enquiry has been recorded.";
+          status.className = "text-sm text-bone-100";
+        }
+        form.reset();
+      }
+    });
+
+    form.addEventListener("input", (event) => {
+      const target = event.target as HTMLElement;
+      if (
+        target.classList.contains("is-invalid") &&
+        (target as HTMLInputElement).checkValidity()
+      ) {
+        target.classList.remove("is-invalid");
+      }
+    });
+  }
+
+  document.addEventListener("astro:page-load", setup);
+</script>

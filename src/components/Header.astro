@@ -1,0 +1,293 @@
+---
+import { nav, contact } from "../data/site";
+import Wordmark from "./Wordmark.astro";
+import Icon from "./Icon.astro";
+
+interface Props {
+  /** Transparent over a dark hero, or solid from the first pixel */
+  overHero?: boolean;
+}
+const { overHero = false } = Astro.props;
+
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isActive = (href: string) => (href === "/" ? path === "/" : path.startsWith(href));
+---
+
+<header
+  id="site-header"
+  transition:name="site-header"
+  data-over-hero={overHero ? "true" : "false"}
+  class:list={[
+    "fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,box-shadow] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+    overHero
+      ? "bg-transparent border-b border-transparent"
+      : "bg-ink-900/95 border-b border-white/10 backdrop-blur-xl",
+  ]}
+>
+  {/* Utility strip — hidden once scrolled, and on mobile */}
+  <div
+    id="util-strip"
+    class="hidden overflow-hidden border-b border-white/10 transition-[height,opacity] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] lg:block"
+  >
+    <div class="shell flex h-10 items-center justify-between text-[0.6875rem] tracking-[0.14em] text-mute-300 uppercase">
+      <span class="font-display">{contact.addressLines[1]}</span>
+      <div class="flex items-center gap-7 font-display">
+        <a
+          href={`tel:${contact.phoneHref}`}
+          class="flex items-center gap-2 transition-colors hover:text-bone-50"
+        >
+          <Icon name="phone" class="h-3.5 w-3.5 text-brand-500" />
+          {contact.phone}
+        </a>
+        <a
+          href={`mailto:${contact.email}`}
+          class="flex items-center gap-2 transition-colors hover:text-bone-50"
+        >
+          <Icon name="mail" class="h-3.5 w-3.5 text-brand-500" />
+          {contact.email}
+        </a>
+        <div class="flex items-center gap-4 border-l border-white/10 pl-7">
+          {
+            contact.socials.map((s) => (
+              <a href={s.href} aria-label={s.label} class="transition-colors hover:text-brand-500">
+                <Icon name={s.icon as any} class="h-3.5 w-3.5" />
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {/* Main bar */}
+  <div class="shell flex h-20 items-center justify-between gap-6 lg:h-24">
+    <Wordmark />
+
+    <nav aria-label="Primary" class="hidden items-center gap-1 lg:flex">
+      {
+        nav.map((item) => (
+          <a
+            href={item.href}
+            aria-current={isActive(item.href) ? "page" : undefined}
+            class:list={[
+              "group relative px-4 py-2 font-display text-[0.75rem] font-semibold tracking-[0.14em] uppercase transition-colors duration-300",
+              isActive(item.href) ? "text-bone-50" : "text-mute-300 hover:text-bone-50",
+            ]}
+          >
+            {item.label}
+            <span
+              class:list={[
+                "absolute inset-x-4 -bottom-0.5 h-[2px] origin-left bg-brand-500 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+                isActive(item.href) ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
+              ]}
+            />
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <a href="/contact" class="btn btn-primary hidden xl:inline-flex">
+        Enquire Now
+        <Icon name="arrow-right" class="h-4 w-4" />
+      </a>
+
+      {/* Mobile toggle */}
+      <button
+        id="nav-toggle"
+        type="button"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        class="flex h-11 w-11 flex-col items-center justify-center gap-[5px] border border-white/15 transition-colors hover:border-brand-600 lg:hidden"
+      >
+        <span class="nav-bar block h-[1.5px] w-5 bg-bone-50 transition-transform duration-400"></span>
+        <span class="nav-bar block h-[1.5px] w-5 bg-bone-50 transition-all duration-400"></span>
+        <span class="nav-bar block h-[1.5px] w-5 bg-bone-50 transition-transform duration-400"></span>
+      </button>
+    </div>
+  </div>
+
+  {/* Scroll progress — the red line, again */}
+  <div
+    id="scroll-progress"
+    class="absolute inset-x-0 bottom-0 h-[2px] origin-left scale-x-0 bg-brand-600"
+  >
+  </div>
+</header>
+
+{/* Mobile drawer */}
+<div
+  id="mobile-nav"
+  class="invisible fixed inset-0 z-40 opacity-0 transition-[opacity,visibility] duration-400 lg:hidden"
+>
+  <div id="nav-scrim" class="absolute inset-0 bg-ink-950/80 backdrop-blur-sm"></div>
+  <nav
+    aria-label="Mobile"
+    class="absolute top-0 right-0 flex h-full w-[min(88vw,24rem)] translate-x-full flex-col overflow-y-auto border-l border-white/10 bg-ink-900 pt-28 pb-10 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+    id="nav-panel"
+  >
+    <div class="flex flex-col px-7">
+      {
+        nav.map((item, i) => (
+          <a
+            href={item.href}
+            class:list={[
+              "group flex items-center justify-between border-b border-white/8 py-5 font-display text-2xl font-semibold tracking-tight transition-colors",
+              isActive(item.href) ? "text-brand-500" : "text-bone-100 hover:text-brand-500",
+            ]}
+          >
+            <span class="flex items-baseline gap-4">
+              <span class="tnum font-sans text-[0.625rem] tracking-[0.2em] text-mute-500">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              {item.label}
+            </span>
+            <Icon
+              name="arrow-up-right"
+              class="h-5 w-5 -translate-x-2 opacity-0 transition-all duration-400 group-hover:translate-x-0 group-hover:opacity-100"
+            />
+          </a>
+        ))
+      }
+    </div>
+
+    <div class="mt-auto space-y-5 px-7 pt-10">
+      <a href="/contact" class="btn btn-primary w-full">
+        Enquire Now
+        <Icon name="arrow-right" class="h-4 w-4" />
+      </a>
+      <div class="space-y-2.5 text-sm text-mute-300">
+        <a href={`tel:${contact.phoneHref}`} class="flex items-center gap-3 hover:text-bone-50">
+          <Icon name="phone" class="h-4 w-4 text-brand-500" />
+          {contact.phone}
+        </a>
+        <a href={`mailto:${contact.email}`} class="flex items-center gap-3 hover:text-bone-50">
+          <Icon name="mail" class="h-4 w-4 text-brand-500" />
+          {contact.email}
+        </a>
+      </div>
+      <div class="flex gap-5 pt-2 text-mute-300">
+        {
+          contact.socials.map((s) => (
+            <a href={s.href} aria-label={s.label} class="hover:text-brand-500">
+              <Icon name={s.icon as any} class="h-[18px] w-[18px]" />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </nav>
+</div>
+
+<style>
+  #nav-toggle[aria-expanded="true"] .nav-bar:nth-child(1) {
+    transform: translateY(6.5px) rotate(45deg);
+  }
+  #nav-toggle[aria-expanded="true"] .nav-bar:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  #nav-toggle[aria-expanded="true"] .nav-bar:nth-child(3) {
+    transform: translateY(-6.5px) rotate(-45deg);
+  }
+
+  #mobile-nav.is-open {
+    visibility: visible;
+    opacity: 1;
+  }
+  /* Tailwind's translate-x-full sets the `translate` property, not `transform`,
+     so the open state has to clear that same property to slide the panel in. */
+  #mobile-nav.is-open #nav-panel {
+    translate: 0;
+  }
+
+  /* Solid state once the page is scrolled past the hero lip */
+  #site-header.is-stuck {
+    background-color: color-mix(in srgb, var(--color-ink-900) 94%, transparent);
+    border-bottom-color: rgb(255 255 255 / 0.1);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 18px 50px -30px rgb(0 0 0 / 0.9);
+  }
+  #site-header.is-stuck #util-strip {
+    height: 0;
+    opacity: 0;
+    border-color: transparent;
+  }
+</style>
+
+<script>
+  /* Re-bound on every client-side navigation: the header DOM is replaced, so
+     window-level listeners from the previous page would point at dead nodes. */
+  let cleanup: (() => void)[] = [];
+
+  function setup() {
+    cleanup.forEach((fn) => fn());
+    cleanup = [];
+
+    const header = document.getElementById("site-header");
+    const progress = document.getElementById("scroll-progress");
+    const toggle = document.getElementById("nav-toggle");
+    const drawer = document.getElementById("mobile-nav");
+    const scrim = document.getElementById("nav-scrim");
+
+    /* --- stuck state + scroll progress --------------------------------- */
+    let frame = 0;
+    const onScroll = () => {
+      frame = 0;
+      const y = window.scrollY;
+      header?.classList.toggle("is-stuck", y > 40);
+
+      if (progress) {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        progress.style.transform = `scaleX(${max > 0 ? Math.min(y / max, 1) : 0})`;
+      }
+    };
+    const request = () => {
+      if (!frame) frame = requestAnimationFrame(onScroll);
+    };
+
+    window.addEventListener("scroll", request, { passive: true });
+    window.addEventListener("resize", request);
+    onScroll();
+
+    cleanup.push(() => {
+      window.removeEventListener("scroll", request);
+      window.removeEventListener("resize", request);
+      if (frame) cancelAnimationFrame(frame);
+    });
+
+    /* --- mobile drawer -------------------------------------------------- */
+    const setOpen = (open: boolean) => {
+      drawer?.classList.toggle("is-open", open);
+      toggle?.setAttribute("aria-expanded", String(open));
+      toggle?.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      document.body.style.overflow = open ? "hidden" : "";
+    };
+
+    const onToggle = () => setOpen(toggle?.getAttribute("aria-expanded") !== "true");
+    const onScrim = () => setOpen(false);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+
+    toggle?.addEventListener("click", onToggle);
+    scrim?.addEventListener("click", onScrim);
+    document.addEventListener("keydown", onKey);
+
+    const links = drawer?.querySelectorAll("a") ?? [];
+    links.forEach((a) => a.addEventListener("click", onScrim));
+
+    cleanup.push(() => {
+      document.removeEventListener("keydown", onKey);
+      /* The drawer locks body scroll; never leave that behind on navigation */
+      document.body.style.overflow = "";
+    });
+  }
+
+  document.addEventListener("astro:page-load", setup);
+  document.addEventListener("astro:before-swap", () => {
+    cleanup.forEach((fn) => fn());
+    cleanup = [];
+  });
+</script>

@@ -1,0 +1,61 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHeader from "../components/PageHeader.astro";
+import About from "../components/About.astro";
+import WhyUs from "../components/WhyUs.astro";
+import FounderMessage from "../components/FounderMessage.astro";
+import Leadership from "../components/Leadership.astro";
+import Credentials from "../components/Credentials.astro";
+import ClosingCta from "../components/ClosingCta.astro";
+import { heroStats, company } from "../data/site";
+---
+
+<Base
+  title="About Us"
+  description={`${company.legalName} — who we are, how we work, and the team accountable for delivery.`}
+>
+  <PageHeader
+    crumb="About"
+    eyebrow="Who We Are"
+    title="A UAE developer that owns what it builds."
+    lede="Fifteen years of delivering and holding property across the Emirates — and a way of working built around that long position."
+    image="https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&w=2000&q=80"
+  />
+
+  {/* Stat band */}
+  <section class="border-b border-white/10 bg-ink-900">
+    <div class="shell">
+      <dl class="grid grid-cols-2 lg:grid-cols-4">
+        {
+          heroStats.map((stat, i) => (
+            <div
+              class:list={[
+                "py-9 pr-6 lg:py-12",
+                i > 0 && "lg:border-l lg:border-white/10 lg:pl-10",
+                i % 2 === 1 && "border-l border-white/10 pl-6 lg:pl-10",
+                i > 1 && "border-t border-white/10 lg:border-t-0",
+              ]}
+              data-reveal
+              style={`--reveal-delay:${i * 80}ms`}
+            >
+              <dd class="font-display text-4xl font-semibold tracking-tight text-bone-50 tnum lg:text-5xl">
+                <span data-count={stat.value}>{stat.value}</span>
+                <span class="text-brand-500">{stat.suffix}</span>
+              </dd>
+              <dt class="mt-2 font-display text-[0.6875rem] font-medium tracking-[0.18em] text-mute-300 uppercase">
+                {stat.label}
+              </dt>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <About />
+  <WhyUs />
+  <FounderMessage />
+  <Leadership tone="dark" />
+  <Credentials />
+  <ClosingCta />
+</Base>

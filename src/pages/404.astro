@@ -1,0 +1,32 @@
+---
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+---
+
+<Base title="Page Not Found" description="The page you were looking for could not be found.">
+  <section class="flex min-h-[80svh] items-center bg-ink-900 py-32">
+    <div class="shell">
+      <span class="eyebrow" data-reveal>Error 404</span>
+      <h1 class="display-xl mt-8 text-bone-50" data-reveal style="--reveal-delay:80ms">
+        Off the <span class="text-brand-500">line</span>.
+      </h1>
+      <div
+        class="mt-9 h-[2px] w-24 origin-left bg-brand-600"
+        data-reveal-line
+        style="--reveal-delay:200ms"
+      >
+      </div>
+      <p class="lede mt-9 max-w-lg" data-reveal style="--reveal-delay:260ms">
+        The page you were looking for has moved or no longer exists. Head back to the homepage or
+        browse the portfolio.
+      </p>
+      <div class="mt-11 flex flex-wrap gap-4" data-reveal style="--reveal-delay:340ms">
+        <a href="/" class="btn btn-primary">
+          Back to Home
+          <Icon name="arrow-right" class="h-4 w-4" />
+        </a>
+        <a href="/projects" class="btn btn-ghost">View Projects</a>
+      </div>
+    </div>
+  </section>
+</Base>

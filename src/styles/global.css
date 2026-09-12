@@ -1,0 +1,529 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Red Line Properties Development — design tokens
+   Crimson on near-black. Red is an accent, never a wash.
+   ========================================================================== */
+
+@theme {
+  /* Ink — the dark base */
+  --color-ink-950: #08080a;
+  --color-ink-900: #0a0a0c;
+  --color-ink-850: #101014;
+  --color-ink-800: #16161b;
+  --color-ink-700: #1e1e25;
+  --color-ink-600: #2a2a33;
+  --color-ink-500: #3a3a45;
+
+  /* Crimson — the line */
+  --color-brand-400: #f2495c;
+  --color-brand-500: #e11d33;
+  --color-brand-600: #c4162b;
+  --color-brand-700: #9e0f21;
+
+  /* Paper — warm off-whites */
+  --color-bone-50: #ffffff;
+  --color-bone-100: #faf8f6;
+  --color-bone-200: #f2efec;
+  --color-bone-300: #e6e1dc;
+  --color-bone-400: #d3ccc4;
+
+  /* Muted text */
+  --color-mute-300: #a8a29c;
+  --color-mute-400: #857f79;
+  --color-mute-500: #5d5852;
+
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    --shell: 1320px;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    background-color: var(--color-ink-900);
+    color: var(--color-bone-100);
+    font-family: var(--font-sans);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-brand-600);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Slim dark scrollbar so the shell stays consistent */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-ink-950);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-ink-600);
+    border-radius: 99px;
+    border: 3px solid var(--color-ink-950);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-brand-600);
+  }
+}
+
+@layer components {
+  /* ---- Shell --------------------------------------------------------- */
+  .shell {
+    width: 100%;
+    max-width: var(--shell);
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .shell {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  /* ---- Eyebrow: the section label with its red line ------------------ */
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.875rem;
+    font-family: var(--font-display);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-mute-300);
+  }
+  .eyebrow::before {
+    content: "";
+    width: 2.25rem;
+    height: 2px;
+    background: var(--color-brand-500);
+    flex: none;
+  }
+  .eyebrow--dark {
+    color: var(--color-mute-500);
+  }
+
+  /* ---- Display type scale -------------------------------------------- */
+  .display-xl {
+    font-size: clamp(2.75rem, 8vw, 5.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+    font-weight: 600;
+  }
+  .display-lg {
+    font-size: clamp(2.25rem, 5.5vw, 4rem);
+    line-height: 1;
+    letter-spacing: -0.035em;
+  }
+  .display-md {
+    font-size: clamp(1.75rem, 3.4vw, 2.75rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+  }
+
+  .lede {
+    font-size: clamp(1.0625rem, 1.5vw, 1.1875rem);
+    line-height: 1.7;
+    color: var(--color-mute-300);
+  }
+  .lede--dark {
+    color: var(--color-mute-500);
+  }
+
+  /* ---- Buttons -------------------------------------------------------- */
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    padding: 0.9375rem 1.75rem;
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    isolation: isolate;
+    transition:
+      color 0.4s var(--ease-out-expo),
+      border-color 0.4s var(--ease-out-expo);
+  }
+  /* Wipe-fill on hover, left to right */
+  .btn::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s var(--ease-out-expo);
+  }
+  .btn:hover::after {
+    transform: scaleX(1);
+  }
+
+  .btn-primary {
+    background: var(--color-brand-600);
+    color: #fff;
+  }
+  .btn-primary::after {
+    background: var(--color-ink-900);
+  }
+
+  .btn-ghost {
+    border: 1px solid rgb(255 255 255 / 0.22);
+    color: var(--color-bone-100);
+  }
+  .btn-ghost::after {
+    background: var(--color-brand-600);
+  }
+  .btn-ghost:hover {
+    border-color: var(--color-brand-600);
+    color: #fff;
+  }
+
+  .btn-dark {
+    border: 1px solid var(--color-ink-900);
+    color: var(--color-ink-900);
+  }
+  .btn-dark::after {
+    background: var(--color-ink-900);
+  }
+  .btn-dark:hover {
+    color: #fff;
+  }
+
+  /* ---- Link with animated underline ----------------------------------- */
+  .link-line {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .link-line::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.375rem;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.45s var(--ease-out-expo);
+  }
+  .link-line:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  .link-line svg {
+    transition: transform 0.45s var(--ease-out-expo);
+  }
+  .link-line:hover svg {
+    transform: translateX(4px);
+  }
+
+  /* ---- Image frame: dark placeholder so a missing photo still reads ---- */
+  .frame {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--color-ink-800), var(--color-ink-950));
+  }
+  .frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .frame--zoom img {
+    transition:
+      transform 1.1s var(--ease-out-expo),
+      filter 0.6s var(--ease-out-expo);
+  }
+  .group:hover .frame--zoom img {
+    transform: scale(1.06);
+  }
+
+  /* ---- Tabular figures for stats and numerals -------------------------- */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer utilities {
+  /* ---- Scroll reveal -------------------------------------------------
+     Opt in with data-reveal; the value picks the direction. Driven by the
+     shared IntersectionObserver in src/scripts/motion.ts. */
+  [data-reveal] {
+    opacity: 0;
+    transition:
+      opacity 0.9s var(--ease-out-expo),
+      transform 0.9s var(--ease-out-expo),
+      clip-path 1.15s var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  [data-reveal=""],
+  [data-reveal="up"] {
+    transform: translateY(28px);
+  }
+  [data-reveal="left"] {
+    transform: translateX(-44px);
+  }
+  [data-reveal="right"] {
+    transform: translateX(44px);
+  }
+  [data-reveal="zoom"] {
+    transform: scale(0.94);
+  }
+
+  /* A framed image uncovered by a rising curtain, its photo settling back
+     from a slight push-in as it goes.
+
+     The clip sits on the frame's CHILDREN, never the frame itself: Chrome
+     folds a target's own clip-path into its intersection rect, so a fully
+     clipped element reports a ratio of 0 and could never trigger the reveal
+     that would uncover it. The frame's dark background is the curtain.
+
+     This variant also leaves the element's own transform alone, which makes
+     it the one to pair with data-parallax — the transform-based variants
+     would just be overridden by parallax's inline transform. */
+  [data-reveal="mask"] {
+    opacity: 1;
+  }
+  [data-reveal="mask"] > * {
+    clip-path: inset(0 0 101% 0);
+    transition: clip-path 1.15s var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  [data-reveal="mask"] img {
+    transform: scale(1.16);
+    transition:
+      clip-path 1.15s var(--ease-out-expo),
+      transform 1.5s var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  [data-reveal="mask"].is-in > * {
+    clip-path: inset(0 0 0 0);
+  }
+  [data-reveal="mask"].is-in img {
+    transform: scale(1);
+  }
+
+  [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+
+  /* A red line that draws itself in */
+  [data-reveal-line] {
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1s var(--ease-out-expo);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  [data-reveal-line].is-in {
+    transform: scaleX(1);
+  }
+
+  /* ---- Word-by-word headline reveal ----------------------------------
+     motion.ts wraps each word in .split-mask > .split-word. The mask is
+     padded so descenders are not clipped while the word is hidden. */
+  .split-mask {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    padding-bottom: 0.16em;
+    margin-bottom: -0.16em;
+  }
+  .split-word {
+    display: inline-block;
+    transform: translateY(115%);
+    transition: transform 1s var(--ease-out-expo);
+  }
+  [data-split].is-in .split-word {
+    transform: none;
+  }
+
+  .no-motion [data-reveal],
+  .no-motion [data-reveal-line] {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+  }
+  .no-motion .split-word,
+  .no-motion [data-reveal="mask"] img {
+    transform: none;
+  }
+  .no-motion [data-reveal="mask"] > * {
+    clip-path: none;
+  }
+
+  .grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.04;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/* ==========================================================================
+   Page transitions
+   Driven by Astro's ClientRouter. The outgoing page lifts and dissolves, the
+   incoming one rises into place; the header and footer are named groups so
+   they hold still while the content between them changes.
+   ========================================================================== */
+
+@keyframes page-out {
+  to {
+    opacity: 0;
+    transform: translateY(-18px) scale(0.994);
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+}
+
+@keyframes chrome-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+::view-transition-old(root) {
+  animation: page-out 0.3s cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+::view-transition-new(root) {
+  animation: page-in 0.58s var(--ease-out-expo) 0.05s both;
+}
+
+/* The fixed chrome only cross-fades — it must not slide with the content */
+::view-transition-old(site-header),
+::view-transition-old(site-footer) {
+  animation: chrome-fade 0.22s linear reverse both;
+}
+::view-transition-new(site-header),
+::view-transition-new(site-footer) {
+  animation: chrome-fade 0.35s linear 0.1s both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root),
+  ::view-transition-old(site-header),
+  ::view-transition-new(site-header),
+  ::view-transition-old(site-footer),
+  ::view-transition-new(site-footer) {
+    animation: none;
+  }
+}
+
+/* ---- Navigation progress line -------------------------------------------
+   The brand line again: it grows while the next page is fetched, completes
+   on arrival, then fades out. */
+#nav-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  height: 2px;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    var(--color-brand-700),
+    var(--color-brand-500)
+  );
+}
+
+#nav-progress.is-loading {
+  opacity: 1;
+  transform: scaleX(0.8);
+  transition:
+    transform 1.4s var(--ease-out-expo),
+    opacity 0.12s linear;
+}
+
+#nav-progress.is-done {
+  opacity: 0;
+  transform: scaleX(1);
+  transition:
+    transform 0.28s ease-out,
+    opacity 0.4s ease-out 0.18s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #nav-progress {
+    display: none;
+  }
+}

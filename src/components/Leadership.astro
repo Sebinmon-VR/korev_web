@@ -1,0 +1,73 @@
+---
+import { leadership } from "../data/site";
+import SectionHead from "./SectionHead.astro";
+
+interface Props {
+  tone?: "light" | "dark";
+}
+const { tone = "light" } = Astro.props;
+const onBone = tone === "dark";
+---
+
+<section
+  class:list={["py-24 md:py-32", onBone ? "bg-bone-100 text-ink-900" : "bg-ink-900"]}
+>
+  <div class="shell">
+    <SectionHead
+      eyebrow={leadership.eyebrow}
+      title={leadership.title}
+      lede={leadership.lede}
+      tone={onBone ? "dark" : "light"}
+    />
+
+    <div class="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-7">
+      {
+        leadership.members.map((member, i) => (
+          <article
+            class="group"
+            data-reveal
+            style={`--reveal-delay:${i * 90}ms`}
+          >
+            <div class="frame frame--zoom aspect-4/5 w-full" data-reveal="mask">
+              <img
+                src={member.image}
+                alt={member.name}
+                loading="lazy"
+                decoding="async"
+                class="grayscale transition-[filter] duration-700 group-hover:grayscale-0"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-ink-950/70 via-transparent to-transparent" />
+              {/* Red line sweeps across the base of the portrait */}
+              <span
+                aria-hidden="true"
+                class="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-brand-600 transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100"
+              />
+            </div>
+
+            <div class="pt-5">
+              <h3
+                class:list={[
+                  "font-display text-lg font-semibold tracking-tight",
+                  onBone ? "text-ink-900" : "text-bone-50",
+                ]}
+              >
+                {member.name}
+              </h3>
+              <p class="mt-1 font-display text-[0.625rem] font-medium tracking-[0.2em] text-brand-500 uppercase">
+                {member.role}
+              </p>
+              <p
+                class:list={[
+                  "mt-3 text-sm leading-relaxed",
+                  onBone ? "text-mute-500" : "text-mute-300",
+                ]}
+              >
+                {member.bio}
+              </p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

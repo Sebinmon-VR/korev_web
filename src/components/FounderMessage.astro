@@ -1,0 +1,64 @@
+---
+import { founderMessage } from "../data/site";
+---
+
+<section class="relative overflow-hidden bg-brand-700 py-24 md:py-28">
+  {/* Oversized quote glyph */}
+  <span
+    aria-hidden="true"
+    data-parallax="70"
+    class="pointer-events-none absolute -top-16 left-4 font-display text-[22rem] leading-none font-bold text-white/[0.07] select-none md:left-16"
+  >
+    &ldquo;
+  </span>
+
+  <div class="shell relative">
+    <div class="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+      <div class="lg:col-span-4">
+        <div class="frame aspect-4/5 w-full max-w-xs" data-reveal="mask" data-parallax="-30">
+          <img
+            src={founderMessage.image}
+            alt={founderMessage.name}
+            loading="lazy"
+            decoding="async"
+            class="grayscale"
+          />
+        </div>
+      </div>
+
+      <div class="lg:col-span-8">
+        <span class="eyebrow text-white/70" data-reveal>{founderMessage.eyebrow}</span>
+
+        <blockquote
+          class="mt-8 font-display text-2xl leading-[1.35] font-medium tracking-tight text-white md:text-[2.125rem]"
+          data-reveal="right"
+          style="--reveal-delay:100ms"
+        >
+          {founderMessage.quote}
+        </blockquote>
+
+        <div
+          class="mt-9 flex items-center gap-4 border-t border-white/25 pt-7"
+          data-reveal
+          style="--reveal-delay:200ms"
+        >
+          <span class="h-10 w-[2px] bg-white/70"></span>
+          <div>
+            <p class="font-display text-base font-semibold text-white">{founderMessage.name}</p>
+            <p
+              class="mt-0.5 font-display text-[0.6875rem] tracking-[0.18em] text-white/70 uppercase"
+            >
+              {founderMessage.role}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .eyebrow.text-white\/70::before {
+    background: rgb(255 255 255 / 0.8);
+  }
+</style>

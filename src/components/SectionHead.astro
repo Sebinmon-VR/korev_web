@@ -1,0 +1,51 @@
+---
+interface Props {
+  eyebrow: string;
+  title: string;
+  lede?: string;
+  tone?: "light" | "dark";
+  align?: "left" | "center";
+  class?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  lede,
+  tone = "light",
+  align = "left",
+  class: klass = "",
+} = Astro.props;
+
+const dark = tone === "dark";
+---
+
+<div
+  class:list={[
+    "max-w-3xl",
+    align === "center" && "mx-auto flex flex-col items-center text-center",
+    klass,
+  ]}
+>
+  <span class:list={["eyebrow", dark && "eyebrow--dark"]} data-reveal>{eyebrow}</span>
+
+  <h2
+    class:list={["display-lg mt-6", dark ? "text-ink-900" : "text-bone-50"]}
+    data-split
+    data-split-delay={90}
+  >
+    {title}
+  </h2>
+
+  {
+    lede && (
+      <p
+        class:list={["lede mt-6", dark && "lede--dark"]}
+        data-reveal
+        style="--reveal-delay:160ms"
+      >
+        {lede}
+      </p>
+    )
+  }
+</div>

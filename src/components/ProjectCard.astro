@@ -1,0 +1,112 @@
+---
+import type { Project } from "../data/site";
+import Icon from "./Icon.astro";
+
+interface Props {
+  project: Project;
+  index?: number;
+  /** "tall" is the featured 4:5 card, "wide" a 3:2 grid card */
+  ratio?: "tall" | "wide";
+}
+
+const { project, index = 0, ratio = "tall" } = Astro.props;
+
+const statusTone: Record<Project["status"], string> = {
+  Completed: "bg-white/12 text-bone-100",
+  "Under Construction": "bg-brand-600 text-white",
+  Upcoming: "bg-white/12 text-bone-100",
+};
+---
+
+<article
+  class="project-card group relative"
+  data-category={project.category}
+  data-reveal
+  style={`--reveal-delay:${(index % 3) * 100}ms`}
+>
+  <a href={`/projects#${project.id}`} class="block">
+    <div
+      class:list={[
+        "frame frame--zoom w-full",
+        ratio === "tall" ? "aspect-4/5" : "aspect-3/2",
+      ]}
+    >
+      <img src={project.image} alt={project.name} loading="lazy" decoding="async" />
+
+      {/* Base scrim, deepens on hover */}
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/25 to-transparent opacity-85 transition-opacity duration-700 group-hover:opacity-95"
+      >
+      </div>
+
+      {/* Top scrim so the status chip stays legible against bright skies */}
+      <div
+        class="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-ink-950/65 to-transparent"
+      >
+      </div>
+
+      {/* Status chip */}
+      <div class="absolute top-5 left-5 flex gap-2">
+        <span
+          class:list={[
+            "px-3 py-1.5 font-display text-[0.5625rem] font-semibold tracking-[0.16em] uppercase backdrop-blur-sm",
+            statusTone[project.status],
+          ]}
+        >
+          {project.status}
+        </span>
+      </div>
+
+      {/* Arrow affordance */}
+      <span
+        class="absolute top-5 right-5 flex h-10 w-10 translate-y-2 items-center justify-center bg-brand-600 text-white opacity-0 transition-all duration-600 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-y-0 group-hover:opacity-100"
+      >
+        <Icon name="arrow-up-right" class="h-4 w-4" />
+      </span>
+
+      {/* Caption */}
+      <div class="absolute inset-x-0 bottom-0 p-6 md:p-7">
+        <span
+          class="font-display text-[0.625rem] font-medium tracking-[0.2em] text-brand-400 uppercase"
+        >
+          {project.category}
+        </span>
+
+        <h3
+          class="mt-2.5 font-display text-xl font-semibold tracking-tight text-bone-50 md:text-2xl"
+        >
+          {project.name}
+        </h3>
+
+        <p class="mt-2 flex items-center gap-2 text-sm text-mute-300">
+          <Icon name="pin" class="h-3.5 w-3.5 flex-none text-brand-500" />
+          {project.location}
+        </p>
+
+        {/* Meta rail revealed on hover */}
+        <div
+          class="grid grid-rows-[0fr] transition-[grid-template-rows] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:grid-rows-[1fr]"
+        >
+          <div class="overflow-hidden">
+            <dl
+              class="mt-4 flex flex-wrap gap-x-7 gap-y-2 border-t border-white/15 pt-4 text-[0.6875rem] tracking-[0.12em] uppercase"
+            >
+              <div>
+                <dt class="text-mute-400">Year</dt>
+                <dd class="mt-1 font-display font-semibold text-bone-100 tnum">{project.year}</dd>
+              </div>
+              <div>
+                <dt class="text-mute-400">Scale</dt>
+                <dd class="mt-1 font-display font-semibold text-bone-100">{project.units}</dd>
+              </div>
+              <div>
+                <dt class="text-mute-400">Area</dt>
+                <dd class="mt-1 font-display font-semibold text-bone-100 tnum">{project.area}</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+</article>
