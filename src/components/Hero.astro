@@ -38,7 +38,7 @@ import Icon from "./Icon.astro";
   {/* Content — top padding clears the fixed header, then it centres in
       whatever height is left so the stat rail stays on the fold */}
   <div
-    class="shell relative flex flex-1 items-center pt-32 pb-12 md:pt-36 lg:pt-36 lg:pb-14"
+    class="hero-copy shell relative flex flex-1 items-center pt-32 pb-12 md:pt-36 lg:pt-36 lg:pb-14"
     data-hero-fade
   >
     <div class="w-full max-w-4xl">
@@ -63,7 +63,7 @@ import Icon from "./Icon.astro";
 
       {/* The red line, drawn */}
       <div
-        class="mt-8 h-[2px] w-28 origin-left bg-brand-600"
+        class="hero-rule mt-8 h-[2px] w-28 origin-left bg-brand-600"
         data-reveal-line
         style="--reveal-delay:480ms"
       >
@@ -73,7 +73,7 @@ import Icon from "./Icon.astro";
         {hero.lede}
       </p>
 
-      <div class="mt-9 flex flex-wrap gap-4" data-reveal style="--reveal-delay:640ms">
+      <div class="hero-actions mt-9 flex flex-wrap gap-4" data-reveal style="--reveal-delay:640ms">
         <a href={hero.primaryCta.href} class="btn btn-primary">
           {hero.primaryCta.label}
           <Icon name="arrow-right" class="h-4 w-4" />
@@ -86,7 +86,7 @@ import Icon from "./Icon.astro";
   </div>
 
   {/* Stat rail pinned to the base of the hero */}
-  <div class="relative border-t border-white/10 bg-ink-950/60 backdrop-blur-md">
+  <div class="hero-stats relative border-t border-white/10 bg-ink-950/60 backdrop-blur-md">
     <div class="shell">
       <dl class="grid grid-cols-2 lg:grid-cols-4">
         {
@@ -98,8 +98,6 @@ import Icon from "./Icon.astro";
                 i % 2 === 1 && "border-l border-white/10 pl-6 lg:pl-10",
                 i > 1 && "border-t border-white/10 lg:border-t-0",
               ]}
-              data-reveal
-              style={`--reveal-delay:${i * 90}ms`}
             >
               <dt class="order-2 font-display text-[0.6875rem] font-medium tracking-[0.18em] text-mute-300 uppercase">
                 {stat.label}
